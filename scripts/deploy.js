@@ -1,12 +1,26 @@
 const { ethers } = require("hardhat");
+const fs = require("fs");
+const path = require("path");
 
 async function main() {
-    const MyContract = await ethers.getContractFactory("TaskManager");
-    const myContract = await MyContract.deploy();
+    console.log("Deploying...");
+    
+    const taskManagerContract = await ethers.getContractFactory("TaskManager");
+    const taskManagerContractDeployed = await taskManagerContract.deploy();
 
-    await myContract.deployed();
+    await taskManagerContractDeployed.deployed();
 
-    console.log("TaskManager deployed to:", myContract.address);
+    console.log("TaskManager deployed to:", taskManagerContractDeployed.address);
+
+    const addressPath = path.resolve(__dirname, "../deployed/contract-address.txt");
+    fs.writeFileSync(addressPath, taskManagerContractDeployed.address, { encoding: "utf-8" });
+
+    console.log("Contract address saved to:", addressPath);
+
+    const abiPath = path.resolve(__dirname, "../deployed/contract-abi.json");
+    fs.writeFileSync(abiPath, JSON.stringify(taskManagerContract.interface.format(ethers.utils.FormatTypes.json), null, 2), { encoding: "utf-8" });
+
+    console.log("Contract ABI saved to:", abiPath);
 }
 
 main()
@@ -15,4 +29,3 @@ main()
         console.error(error);
         process.exit(1);
     });
-}
