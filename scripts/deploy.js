@@ -7,7 +7,7 @@ async function main() {
     console.log("Compiling...");
     await hre.run('compile');
 
-    const deployFolder = path.resolve(__dirname, "../deployed");
+    const deployFolder = path.resolve(__dirname, "../deploy");
     if (!fs.existsSync(deployFolder)) {
         fs.mkdirSync(deployFolder);
     }
