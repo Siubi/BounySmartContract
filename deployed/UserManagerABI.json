@@ -1,195 +1,237 @@
 [
-  {
-    "type": "constructor",
-    "payable": false,
-    "inputs": []
-  },
-  {
-    "type": "event",
-    "anonymous": false,
-    "name": "RoleChanged",
-    "inputs": [
-      {
-        "type": "address",
-        "name": "user",
-        "indexed": true
-      },
-      {
-        "type": "uint8",
-        "name": "newRole",
-        "indexed": false
-      }
-    ]
-  },
-  {
-    "type": "event",
-    "anonymous": false,
-    "name": "UserAdded",
-    "inputs": [
-      {
-        "type": "address",
-        "name": "user",
-        "indexed": true
-      }
-    ]
-  },
-  {
-    "type": "event",
-    "anonymous": false,
-    "name": "UsernameUpdated",
-    "inputs": [
-      {
-        "type": "address",
-        "name": "user",
-        "indexed": true
-      },
-      {
-        "type": "string",
-        "name": "username",
-        "indexed": false
-      }
-    ]
-  },
-  {
-    "type": "function",
-    "name": "addUser",
-    "constant": false,
-    "payable": false,
-    "inputs": [
-      {
-        "type": "address",
-        "name": "userAddress"
-      },
-      {
-        "type": "uint8",
-        "name": "role"
-      }
-    ],
-    "outputs": []
-  },
-  {
-    "type": "function",
-    "name": "changeRole",
-    "constant": false,
-    "payable": false,
-    "inputs": [
-      {
-        "type": "address",
-        "name": "userAddress"
-      },
-      {
-        "type": "uint8",
-        "name": "newRole"
-      }
-    ],
-    "outputs": []
-  },
-  {
-    "type": "function",
-    "name": "getAllUsers",
-    "constant": true,
-    "stateMutability": "view",
-    "payable": false,
-    "inputs": [],
-    "outputs": [
-      {
-        "type": "tuple[]",
-        "components": [
-          {
-            "type": "address",
-            "name": "userAddress"
-          },
-          {
-            "type": "uint8",
-            "name": "role"
-          },
-          {
-            "type": "string",
-            "name": "username"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "function",
-    "name": "getRole",
-    "constant": true,
-    "stateMutability": "view",
-    "payable": false,
-    "inputs": [
-      {
-        "type": "address",
-        "name": "userAddress"
-      }
-    ],
-    "outputs": [
-      {
-        "type": "uint8"
-      }
-    ]
-  },
-  {
-    "type": "function",
-    "name": "getUser",
-    "constant": true,
-    "stateMutability": "view",
-    "payable": false,
-    "inputs": [
-      {
-        "type": "address",
-        "name": "userAddress"
-      }
-    ],
-    "outputs": [
-      {
-        "type": "tuple",
-        "components": [
-          {
-            "type": "address",
-            "name": "userAddress"
-          },
-          {
-            "type": "uint8",
-            "name": "role"
-          },
-          {
-            "type": "string",
-            "name": "username"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "function",
-    "name": "hasUser",
-    "constant": true,
-    "stateMutability": "view",
-    "payable": false,
-    "inputs": [
-      {
-        "type": "address",
-        "name": "user"
-      }
-    ],
-    "outputs": [
-      {
-        "type": "bool"
-      }
-    ]
-  },
-  {
-    "type": "function",
-    "name": "setUsername",
-    "constant": false,
-    "payable": false,
-    "inputs": [
-      {
-        "type": "string",
-        "name": "username"
-      }
-    ],
-    "outputs": []
-  }
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum UserManager.Role",
+				"name": "newRole",
+				"type": "uint8"
+			}
+		],
+		"name": "RoleChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "UserAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "UserRemoved",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			}
+		],
+		"name": "UsernameUpdated",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "enum UserManager.Role",
+				"name": "role",
+				"type": "uint8"
+			}
+		],
+		"name": "addUser",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "enum UserManager.Role",
+				"name": "newRole",
+				"type": "uint8"
+			}
+		],
+		"name": "changeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllUsers",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "enum UserManager.Role",
+						"name": "role",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					}
+				],
+				"internalType": "struct UserManager.User[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getRole",
+		"outputs": [
+			{
+				"internalType": "enum UserManager.Role",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getUser",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "enum UserManager.Role",
+						"name": "role",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					}
+				],
+				"internalType": "struct UserManager.User",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "hasUser",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "removeUser",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			}
+		],
+		"name": "setUsername",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
 ]
