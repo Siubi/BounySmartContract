@@ -4,10 +4,16 @@ const path = require("path");
 
 async function main() {
     
+    const isLocalhost = hre.network.name === "localhost";
+
     console.log("Compiling...");
     await hre.run('compile');
 
-    const deployFolder = path.resolve(__dirname, "../deploy");
+    const deployFolder = path.resolve(__dirname, "../localhost_deploy");
+    if (!isLocalhost) {
+        deployFolder = path.resolve(__dirname, "../deploy");
+    }
+
     if (!fs.existsSync(deployFolder)) {
         fs.mkdirSync(deployFolder);
     }
