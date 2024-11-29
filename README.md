@@ -29,13 +29,31 @@ Compile the Solidity contracts using Hardhat:
 
 **4. Deploy the contract**
 
-```npx hardhat run scripts/deploy.js --network linea_testnet```
+* Deploy to linea_mainnet
+
+    ```npx hardhat run scripts/deploy.js --network linea_mainnet```
+
+* Deploy to linea_testnet
+
+    ```npx hardhat run scripts/deploy.js --network linea_testnet```
+
+* Deploy to localhost
+    
+    Run node server in separate console or in background
+    ```npx hardhat node```
+
+    ```npx hardhat run scripts/deploy.js --network localhost```
+
+
+
 
 # After deployment:
-
-* The TaskManager contract address will be saved to `deploy/TaskManagerAddress.json`.
-* The UserManager contract address will be saved to `deploy/TaskManagerAddress.json`.
-* The TaskManager ABI will be saved to `deploy/TaskManagerABI.json`.
-* The UserManager ABI will be saved to `deploy/UserManagerABI.json`.
-* deploy is in fact a submodule of https://github.com/jdrachal/BounySmartContractDeploy.git
+* The `localhost` deployment artifacts are stored in the `localhost_deploy` directory.
+* The `linea_mainnet` and `linea_testnet` deployment artifacts are stored in the `deploy` directory.
+* The TaskManager contract address will be saved to `TaskManagerAddress.json`.
+* The UserManager contract address will be saved to `TaskManagerAddress.json`.
+* The TaskManager ABI will be saved to `TaskManagerABI.json`.
+* The UserManager ABI will be saved to `UserManagerABI.json`.
+* `deploy` is in fact a submodule of https://github.com/jdrachal/BounySmartContractDeploy.git
 so remember to bump the version in version.json and create a patch!
+

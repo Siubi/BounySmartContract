@@ -12,5 +12,9 @@ module.exports = {
       url: `https://rpc.linea.build/`,
       accounts: [process.env.PRIVATE_KEY],
     },
+    localhost: {
+      url: "http://127.0.0.1:8545",
+      accounts: [process.env.PRIVATE_KEY],
+    },
   },
 };
