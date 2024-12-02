@@ -1,8 +1,25 @@
-require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
 
 module.exports = {
-  solidity: "0.8.0",
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.0", // Specify your Solidity version
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+          outputSelection: {
+            "*": {
+              "*": ["storageLayout"], // Enable storage layout output
+            },
+          },
+        },
+      },
+    ],
+  },
   networks: {
     linea_testnet: {
       url: "https://rpc.sepolia.linea.build/",
@@ -17,4 +34,5 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY],
     },
   },
+
 };
