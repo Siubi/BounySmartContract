@@ -44,6 +44,7 @@ Compile the Solidity contracts using Hardhat:
 
     ```npx hardhat run scripts/deploy.js --network localhost```
 
+    **Deployment to localhost is not validated with Unit Tests automatically!**
 
 
 
@@ -56,4 +57,7 @@ Compile the Solidity contracts using Hardhat:
 * The UserManager ABI will be saved to `UserManagerABI.json`.
 * `deploy` is in fact a submodule of https://github.com/jdrachal/BounySmartContractDeploy.git
 so remember to bump the version in version.json and create a patch!
+
+# Unit testing
+Run `npm test`
 

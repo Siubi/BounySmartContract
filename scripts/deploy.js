@@ -1,15 +1,35 @@
-const hre = require("hardhat");
-const fs = require("fs");
-const path = require("path");
+import hardhat from "hardhat";
+const { ethers, network} = hardhat;
+import { fileURLToPath } from "url";
+import fs from "fs";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+async function runTests() {
+    try {
+      console.log("Running tests...");
+      await run("test");
+      console.log("All tests passed.");
+    } catch (error) {
+      console.error("Tests failed. Deployment aborted.");
+      process.exit(1); // Exit with error code
+    }
+  }
 
 async function main() {
-    
-    const isLocalhost = hre.network.name === "localhost";
+    const isLocalhost = network.name === "localhost";
+
+    if (!isLocalhost) {
+        await runTests();
+    }
+
 
     console.log("Compiling...");
-    await hre.run('compile');
+    await run('compile');
 
-    const deployFolder = path.resolve(__dirname, "../localhost_deploy");
+    let deployFolder = path.resolve(__dirname, "../localhost_deploy");
     if (!isLocalhost) {
         deployFolder = path.resolve(__dirname, "../deploy");
     }
@@ -19,7 +39,7 @@ async function main() {
     }
 
     console.log("Deploying UserManager...");
-    const UserManager = await hre.ethers.getContractFactory("UserManager");
+    const UserManager = await ethers.getContractFactory("UserManager");
     const userManager = await UserManager.deploy();
     await userManager.deployed();
     console.log("UserManager deployed to:", userManager.address);
@@ -33,9 +53,9 @@ async function main() {
         path.join(deployFolder, "UserManagerABI.json"),
         JSON.stringify(JSON.parse(userManager.interface.format('json')), null, 2)
     );
-    
+
     console.log("Deploying TaskManager...");
-    const TaskManager = await hre.ethers.getContractFactory("TaskManager");
+    const TaskManager = await ethers.getContractFactory("TaskManager");
     const taskManager = await TaskManager.deploy(userManager.address);
     await taskManager.deployed();
     console.log("TaskManager deployed to:", taskManager.address);
