@@ -21,13 +21,13 @@ async function runTests() {
 async function main() {
     const isLocalhost = network.name === "localhost";
 
-    if (!isLocalhost) {
-        await runTests();
-    }
-
 
     console.log("Compiling...");
     await run('compile');
+
+    if (!isLocalhost) {
+        await runTests();
+    }
 
     let deployFolder = path.resolve(__dirname, "../localhost_deploy");
     if (!isLocalhost) {

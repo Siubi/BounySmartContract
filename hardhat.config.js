@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+require("solidity-coverage");
 require("dotenv").config();
 
 module.exports = {
@@ -20,6 +21,7 @@ module.exports = {
       },
     ],
   },
+  plugins: ["solidity-coverage"],
   networks: {
     linea_testnet: {
       url: "https://rpc.sepolia.linea.build/",
