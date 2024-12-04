@@ -4,3 +4,4 @@ contracts/.idea
 cache/
 .env
 localhost_deploy/
+package-lock.json

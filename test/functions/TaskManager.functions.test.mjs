@@ -1,38 +1,32 @@
-import { smock } from '@defi-wonderland/smock';
 import { expect } from "chai";
 import hardhat from "hardhat"
 const { ethers } = hardhat;
+import { setup } from "../helpers/TaskManagerSetup.mjs";
 
 describe("TaskManager - functions", function () {
   let userManagerMock, taskManager;
   let owner, maintainer, assignee, viewer, none;
-  let unprevilagedUsers;
   const STATUS_BACKLOG = 0;
   const STATUS_IN_PROGRESS = 1;
-  const STATUS_VALIDATE = 2;
   const STATUS_DONE = 3;
   const taskTitle1 = "Title1";
   const taskDescription1 = "Description1";
   const taskTitle2 = "Title2";
   const taskDescription2 = "Description2";
 
-  beforeEach(async function () {
-    // Deploy the mock UserManager contract
-    const UserManagerMockFactory = await smock.mock("UserManager");
-    userManagerMock = await UserManagerMockFactory.deploy();
-    await userManagerMock.deployed();
-    
+  beforeEach(async () => {
+    // Initialize the setup by calling the setup function
+    ({
+        owner,
+        maintainer,
+        assignee,
+        viewer,
+        none,
+        userManagerMock,
+        taskManager
+    } = await setup());
 
-    // Deploy the contract
-    const TaskManagerFactory = await ethers.getContractFactory("TaskManager");
-    taskManager = await TaskManagerFactory.deploy(userManagerMock.address);
-    await taskManager.deployed();
-
-    // Get signers
-    [owner, maintainer, assignee, viewer, none] = await ethers.getSigners();
-    unprevilagedUsers = [none, viewer, assignee];
     await taskManager.connect(owner).createTask(taskTitle1, taskDescription1);
-    userManagerMock.hasUser.returns(true);
     await taskManager.connect(owner).setAssignee(0, assignee.address);
     await taskManager.connect(owner).createTask(taskTitle2, taskDescription2);
   });
@@ -57,7 +51,6 @@ describe("TaskManager - functions", function () {
     });
 
     it("Assignee should be set", async function () {
-      userManagerMock.hasUser.returns(true);
       await taskManager.connect(owner).setAssignee(1, none.address);
 
       const task = await taskManager.connect(owner).getTaskById(1);
@@ -128,7 +121,6 @@ describe("TaskManager - functions", function () {
     });
 
     it("Set assigne should reject when assignee not existing", async function () {
-      userManagerMock.hasUser.returns(false);
       expect(
         taskManager.connect(owner).setAssignee(1, none.address)
       ).to.be.rejectedWith("User must be added to the project first");

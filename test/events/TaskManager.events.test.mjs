@@ -1,35 +1,30 @@
-import { smock } from '@defi-wonderland/smock';
 import { expect, use } from "chai";
 import hardhat from "hardhat";
 const { ethers } = hardhat;
+import { setup } from "../helpers/TaskManagerSetup.mjs";
 
 import chaiAsPromised from "chai-as-promised";
 
-use(smock.matchers);
 use(chaiAsPromised);
 
 describe("TaskManager - events", function () {
   let userManagerMock, taskManager;
   let owner, maintainer, assignee, viewer, none;
-  let unprevilagedUsers;
   const taskTitle = "Title";
   const taskDescription = "Description";
 
-  beforeEach(async function () {
-    // Deploy the mock UserManager contract
-    const UserManagerMockFactory = await smock.mock("UserManager");
-    userManagerMock = await UserManagerMockFactory.deploy();
-    await userManagerMock.deployed();
-    
+  beforeEach(async () => {
+    // Initialize the setup by calling the setup function
+    ({
+        owner,
+        maintainer,
+        assignee,
+        viewer,
+        none,
+        userManagerMock,
+        taskManager
+    } = await setup());
 
-    // Deploy the contract
-    const TaskManagerFactory = await ethers.getContractFactory("TaskManager");
-    taskManager = await TaskManagerFactory.deploy(userManagerMock.address);
-    await taskManager.deployed();
-
-    // Get signers
-    [owner, maintainer, assignee, viewer, none] = await ethers.getSigners();
-    unprevilagedUsers = [none, viewer, assignee];
     await taskManager.connect(owner).createTask(taskTitle, taskDescription);
   });
 
@@ -43,7 +38,6 @@ describe("TaskManager - events", function () {
     });
 
     it("Should emit AssigneeSet when the assignee is set", async function () {
-      userManagerMock.hasUser.returns(true);
       await expect(
         taskManager.connect(owner).setAssignee(0, maintainer.address)
       ).to.emit(taskManager, "AssigneeSet")
@@ -51,7 +45,6 @@ describe("TaskManager - events", function () {
     });
 
     it("Should emit TaskStatusUpdated when the task status is updated", async function () {
-      userManagerMock.hasUser.returns(true);
       await taskManager.connect(owner).setAssignee(0, maintainer.address);
       await expect(
         taskManager.connect(owner).updateTaskStatus(0, 1)
@@ -69,7 +62,6 @@ describe("TaskManager - events", function () {
 
     it("Should emit TaskCompleted when the task is completed", async function () {
       const depositAmount = ethers.utils.parseEther("0.0001");
-      userManagerMock.hasUser.returns(true);
       await taskManager.connect(owner).setAssignee(0, maintainer.address);
       await taskManager.connect(owner).depositETH(0, { value: depositAmount });
       await taskManager.connect(owner).updateTaskStatus(0, 2);
@@ -83,7 +75,6 @@ describe("TaskManager - events", function () {
   describe("Event negative tests", function () {
 
     it("Should not emit AssigneeSet when the user is not added", async function () {
-      userManagerMock.hasUser.returns(false);
       expect(
         taskManager.connect(owner).setAssignee(0, maintainer.address)
       ).to.not.emit(taskManager, "AssigneeSet");
@@ -96,7 +87,6 @@ describe("TaskManager - events", function () {
     });
 
     it("Should not emit TaskCompleted when the reward is not set", async function () {
-      userManagerMock.hasUser.returns(true);
       await taskManager.connect(owner).setAssignee(0, maintainer.address);
       await taskManager.connect(owner).updateTaskStatus(0, 2);
       expect(
@@ -106,7 +96,6 @@ describe("TaskManager - events", function () {
 
     it("Should not emit TaskCompleted when the task status is not validate", async function () {
       const depositAmount = ethers.utils.parseEther("0.0001");
-      userManagerMock.hasUser.returns(true);
       await taskManager.connect(owner).setAssignee(0, maintainer.address);
       await taskManager.connect(owner).depositETH(0, { value: depositAmount });
       expect(

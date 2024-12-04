@@ -1,10 +1,12 @@
 {
   "name": "hardhat-project",
   "dependencies": {
-    "@defi-wonderland/smock": "^2.4.0",
+    "@ethereum-waffle/mock-contract": "^4.0.4",
+    "@ethersproject/providers": "^5.7.2",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
+    "@defi-wonderland/smock": "^2.4.0",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "@nomiclabs/hardhat-waffle": "^2.0.0",
     "chai": "^4.2.0",
@@ -12,7 +14,9 @@
     "depcheck": "^1.4.7",
     "ethereum-waffle": "^3.0.0",
     "ethers": "^5.7.2",
-    "hardhat": "^2.3.3"
+    "hardhat": "^2.22.17",
+    "hardhat-coverage": "^0.9.19",
+    "solidity-coverage": "^0.8.14"
   },
   "module": "type",
   "scripts": {
